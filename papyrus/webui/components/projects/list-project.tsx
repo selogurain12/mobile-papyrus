@@ -1,5 +1,5 @@
 import { View, FlatList, Modal, TouchableOpacity, Text } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProjectDto } from "../../../packages/src/dtos/project.dto";
 import { queryKeys } from "../../../packages/src/query-client";
 import { useToast } from "../ui/toast";
@@ -17,8 +17,13 @@ export function ListProject() {
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectDto | null>(null);
 
+  useEffect(() => {
+    if (!user) {
+      showToast("Utilisateur non connecté", 2000, "error");
+    }
+  }, [user, showToast]);
+
   if (!user) {
-    showToast("Utilisateur non connecté", 2000, "error");
     return null;
   }
 
