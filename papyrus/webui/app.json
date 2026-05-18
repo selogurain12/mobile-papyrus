@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "my-expo-app",
+    "slug": "bibliocine",
+    "version": "1.0.0",
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "plugins": [
+      "expo-image-picker",
+      "expo-notifications",
+      "expo-font"
+    ],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.lora2207.bibliocine"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "84a56a12-1470-44c2-8a10-22474c48c312"
+      }
+    },
+    "owner": "lora2207"
+  }
+}

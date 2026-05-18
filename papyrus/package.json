@@ -1,0 +1,51 @@
+{
+  "name": "bibliocine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "lint": "eslint \"{api,packages}/**/*.{ts,tsx}\" --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.base.json",
+    "build_api": "pnpm i && pnpm --filter api run migration && pnpm --filter api run up && pnpm --filter api run build",
+    "start_api": "pnpm --filter api run start"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": "eslint --config .eslintrc.json --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "dependencies": {
+    "@nestjs/cli": "^11.0.10",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "nest": "^0.1.6"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.5.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.2.6",
+    "typescript-eslint": "^8.46.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "zod": "^3.22.4",
+      "react-hook-form": "7.66.1"
+    },
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@scarf/scarf",
+      "bcrypt",
+      "unrs-resolver"
+    ]
+  }
+}
