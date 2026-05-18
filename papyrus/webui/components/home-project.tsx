@@ -11,6 +11,7 @@ import { ObjectsList } from "./object/list-object";
 import { ListResearch } from "./research/list-research";
 import { NotesList } from "./notes/list-notes";
 import { EventsList } from "./event/list-event";
+import { ChapterList } from "./chapter/list-chapter";
 
 export type ProjectScreen =
   | "dashboard"
@@ -46,6 +47,7 @@ export function HomeProject({ route }: Props) {
             {screen === "research" && <ListResearch />}
             {screen === "notes" && <NotesList />}
             {screen === "timeline" && <EventsList />}
+            {screen === "chapters" && <ChapterList />}
           </View>
         </View>
       </View>
