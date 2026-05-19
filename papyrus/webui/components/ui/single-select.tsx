@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   View,
   Text,
@@ -13,12 +14,13 @@ import { X } from "lucide-react-native";
 
 type Option = {
   id: string;
-  label: string;
+  label?: string;
 };
 
 interface SingleSelectorProps<OptionType extends Option> {
   value?: OptionType;
   data: OptionType[];
+  customLabel?: (option: OptionType) => string;
 
   placeholder?: string;
   onChange?: (value?: OptionType) => void;
@@ -29,6 +31,7 @@ interface SingleSelectorProps<OptionType extends Option> {
 export function SingleSelector<OptionType extends Option>({
   value,
   data,
+  customLabel,
   placeholder = "Sélectionner",
   onChange,
   loading,
@@ -38,7 +41,7 @@ export function SingleSelector<OptionType extends Option>({
 
   const filteredData = useMemo(() => {
     if (!search) return data;
-    return data.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()));
+    return data.filter((item) => item.label?.toLowerCase().includes(search.toLowerCase()));
   }, [search, data]);
 
   const handleSelect = (item: OptionType) => {
@@ -60,7 +63,7 @@ export function SingleSelector<OptionType extends Option>({
           setOpen(true);
         }}>
         <Text style={value ? styles.valueText : styles.placeholder}>
-          {value?.label ?? placeholder}
+          {value ? (customLabel?.(value) ?? value.label) : placeholder}
         </Text>
 
         {value ? (
@@ -103,7 +106,7 @@ export function SingleSelector<OptionType extends Option>({
                   onPress={() => {
                     handleSelect(item);
                   }}>
-                  <Text>{item.label}</Text>
+                  <Text>{customLabel?.(item) ?? item.label}</Text>
                 </TouchableOpacity>
               )}
             />
