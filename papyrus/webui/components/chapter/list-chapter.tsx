@@ -34,6 +34,7 @@ import { ChapterEditor } from "./chapter-editor";
 import { UpdateChapter } from "./actions/chapter/update-chapter";
 import { UpdatePart } from "./actions/part/update-part";
 
+// eslint-disable-next-line complexity
 export function ChapterList() {
   const { currentProject } = useProject();
 
@@ -84,7 +85,7 @@ export function ChapterList() {
   });
 
   const chapters = useMemo(() => {
-    const data = chaptersData?.body.body ?? [];
+    const data = chaptersData?.body.data ?? [];
 
     return data.map((chapter) => {
       if (selectedChapter?.id === chapter.id) {
@@ -462,7 +463,7 @@ function PartAccordion({
                 <View style={{ flex: 1 }}>
                   <Text style={styles.chapterTitle}>{ch.title}</Text>
 
-                  <Text style={styles.chapterWords}>{ch.wordCount ?? 0} mots</Text>
+                  <Text style={styles.chapterWords}>{ch.wordCount} mots</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>

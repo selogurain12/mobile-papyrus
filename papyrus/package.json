@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install",
     "lint": "eslint \"{api,packages}/**/*.{ts,tsx}\" --fix",
     "typecheck": "tsc --noEmit -p tsconfig.base.json",
     "build_api": "pnpm i && pnpm --filter api run migration && pnpm --filter api run up && pnpm --filter api run build",
@@ -32,7 +31,6 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.5.0",
-    "husky": "^8.0.0",
     "lint-staged": "^16.2.6",
     "typescript-eslint": "^8.46.3"
   },

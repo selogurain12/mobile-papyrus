@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-/* eslint-disable complexity */
 import {
   View,
   Text,
@@ -15,7 +14,7 @@ import { client } from "utils/clients/client";
 import { useProject } from "context/project-context";
 import * as Sharing from "expo-sharing";
 import { useAuth } from "context/auth-context";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import { queryKeys } from "../../../packages/src/query-client";
 
 type ExportFormat = {
@@ -50,6 +49,7 @@ const exportFormats: ExportFormat[] = [
   },
 ];
 
+// eslint-disable-next-line complexity
 export function ExportPage() {
   const { currentProject } = useProject();
   const { user } = useAuth();
@@ -80,13 +80,41 @@ export function ExportPage() {
   const { mutate, isPending, isSuccess, isError } = client.export.epub.useMutation({
     onSuccess: async (res) => {
       try {
-        const fileUri = FileSystem.documentDirectory + `${currentProject.name ?? "export"}.epub`;
+        const url = res.body.url;
+        console.log("DOWNLOAD URL:", url);
 
-        const downloadResult = await FileSystem.downloadAsync(res.url, fileUri);
+        const fileUri = FileSystem.documentDirectory + `${currentProject.title}.epub`;
+        await fetch(url);
 
-        console.log("Downloaded to:", downloadResult.uri);
+        const response = await fetch(url);
 
-        await Sharing.shareAsync(downloadResult.uri);
+        if (!response.ok) {
+          throw new Error("Erreur téléchargement");
+        }
+
+        const blob = await response.blob();
+
+        const reader = new FileReader();
+
+        reader.onloadend = async () => {
+          const result = reader.result;
+
+          if (typeof result !== "string") {
+            throw new Error("Conversion base64 échouée");
+          }
+
+          const base64 = result.split(",")[1];
+
+          await FileSystem.writeAsStringAsync(fileUri, base64, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          console.log("DOWNLOADED:", fileUri);
+
+          await Sharing.shareAsync(fileUri);
+        };
+
+        reader.readAsDataURL(blob);
       } catch (e) {
         console.log("DOWNLOAD ERROR", e);
       }
@@ -105,7 +133,6 @@ export function ExportPage() {
         </View>
       </View>
 
-      {/* FORMATS */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Formats d'export disponibles</Text>
 
@@ -146,7 +173,6 @@ export function ExportPage() {
         </View>
       </View>
 
-      {/* RESUME */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Aperçu de l'export</Text>
 
@@ -159,15 +185,14 @@ export function ExportPage() {
 
         <View style={styles.resume}>
           <Text>Chapitres:</Text>
-          <Text style={{ fontWeight: "600" }}>{data?.body?.data?.length ?? 0}</Text>
+          <Text style={{ fontWeight: "600" }}>{data?.body.data.length ?? 0}</Text>
         </View>
 
         <View style={styles.resume}>
           <Text>Mots totaux:</Text>
-          <Text style={{ fontWeight: "600" }}>{currentProject?.currentWordCount ?? 0}</Text>
+          <Text style={{ fontWeight: "600" }}>{currentProject.currentWordCount ?? 0}</Text>
         </View>
 
-        {/* BUTTON */}
         <TouchableOpacity
           style={styles.saveButton}
           onPress={() => {
@@ -195,7 +220,6 @@ export function ExportPage() {
           )}
         </TouchableOpacity>
 
-        {/* STATUS */}
         {isSuccess && <Text style={{ color: "green", marginTop: 10 }}>Export terminé ✅</Text>}
 
         {isError && <Text style={{ color: "red", marginTop: 10 }}>Erreur export ❌</Text>}
@@ -210,23 +234,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9FAFB",
     padding: 16,
   },
-
   header: {
     marginBottom: 20,
   },
-
   title: {
     fontSize: 24,
     fontWeight: "700",
     color: "#111827",
   },
-
   subtitle: {
     marginTop: 4,
     fontSize: 14,
     color: "#6B7280",
   },
-
   section: {
     backgroundColor: "#FFFFFF",
     borderRadius: 16,
@@ -235,18 +255,15 @@ const styles = StyleSheet.create({
     borderColor: "#E5E7EB",
     marginBottom: 20,
   },
-
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
     color: "#111827",
     marginBottom: 16,
   },
-
   list: {
     gap: 12,
   },
-
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -257,18 +274,15 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#FFFFFF",
   },
-
   cardSelected: {
     borderColor: "#3B82F6",
     backgroundColor: "#EFF6FF",
   },
-
   left: {
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
   },
-
   iconContainer: {
     width: 42,
     height: 42,
@@ -277,32 +291,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#F3F4F6",
   },
-
   iconContainerSelected: {
     backgroundColor: "#DBEAFE",
   },
-
   cardContent: {
     marginLeft: 12,
     flex: 1,
   },
-
   label: {
     fontSize: 16,
     fontWeight: "600",
     color: "#111827",
   },
-
   labelSelected: {
     color: "#1D4ED8",
   },
-
   description: {
     marginTop: 4,
     fontSize: 14,
     color: "#6B7280",
   },
-
   checkContainer: {
     width: 28,
     height: 28,
@@ -311,13 +319,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   resume: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   saveButton: {
     marginTop: 20,
     flexDirection: "row",
@@ -328,7 +334,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: 16,
   },
-
   saveButtonText: {
     color: "#FFFFFF",
     fontWeight: "600",
