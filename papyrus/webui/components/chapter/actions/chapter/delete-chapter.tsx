@@ -9,6 +9,7 @@ import { client } from "utils/clients/client";
 import { styles } from "utils/style/form-style";
 import { useProject } from "context/project-context";
 import { ChapterDto } from "../../../../../packages/src/dtos/chapter.dto";
+import { queryKeys } from "../../../../../packages/src/query-client";
 
 interface ChapterDeleteActionsProps {
   open: boolean;
@@ -39,12 +40,20 @@ export function ChapterDeleteActions({
     return null;
   }
 
-  const { mutate, isPending } = client.chapter.delete.useMutation({
+  const { mutate, isPending } = client.chapter.softDelete.useMutation({
     onSuccess: () => {
       showToast("Chapitre supprimé avec succès", 2000, "success");
 
       void queryClient.invalidateQueries({
-        queryKey: ["chapter.getByPart"],
+        queryKey: queryKeys.chapter.getAll({
+          pathParams: { projectId: chapter.project.id },
+        }),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.chapter.getByPart({
+          pathParams: { projectId: chapter.project.id, partId: chapter.part.id },
+        }),
       });
 
       setOpen(false);

@@ -9,6 +9,7 @@ import { client } from "utils/clients/client";
 import { styles } from "utils/style/form-style";
 import { useProject } from "context/project-context";
 import { PartDto } from "../../../../../packages/src/dtos/part.dto";
+import { queryKeys } from "../../../../../packages/src/query-client";
 
 interface PartDeleteActionsProps {
   open: boolean;
@@ -34,12 +35,20 @@ export function PartDeleteActions({ part, open, setOpen, onClose }: PartDeleteAc
     return null;
   }
 
-  const { mutate, isPending } = client.part.delete.useMutation({
+  const { mutate, isPending } = client.part.softDelete.useMutation({
     onSuccess: () => {
       showToast("Partie supprimée avec succès", 2000, "success");
 
       void queryClient.invalidateQueries({
-        queryKey: ["part.getByPart"],
+        queryKey: queryKeys.part.getAll({
+          pathParams: { projectId: part.project.id },
+        }),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.chapter.getAll({
+          pathParams: { projectId: part.project.id },
+        }),
       });
 
       setOpen(false);

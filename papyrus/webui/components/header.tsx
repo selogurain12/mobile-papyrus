@@ -54,11 +54,6 @@ export function HeaderWithSidebar({ name, setScreen }: Props) {
         <Text style={styles.title} numberOfLines={1}>
           {name}
         </Text>
-
-        <TouchableOpacity style={styles.saveButton}>
-          <Save size={18} color="white" />
-          <Text style={styles.saveText}>Sauvegarder</Text>
-        </TouchableOpacity>
       </View>
 
       {open && <Pressable style={styles.overlay} onPress={toggleSidebar} />}

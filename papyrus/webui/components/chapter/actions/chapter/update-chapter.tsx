@@ -59,9 +59,19 @@ export function UpdateChapter({ chapter, projectId, onCancel }: Props) {
   });
 
   const { mutate, isPending } = client.chapter.update.useMutation({
-    onSuccess() {
+    onSuccess(response) {
       showToast("Chapitre mis à jour avec succès", 2000, "success");
-      void queryClient.invalidateQueries({ queryKey: ["chapter.getByPart"] });
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.chapter.getAll({
+          pathParams: { projectId },
+        }),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.chapter.getByPart({
+          pathParams: { projectId, partId: response.body.part.id },
+        }),
+      });
       form.reset();
       onCancel?.();
     },

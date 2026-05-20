@@ -58,9 +58,19 @@ export function CreateChapter({ projectId, setOpen }: Props) {
   });
 
   const { mutate, isPending } = client.chapter.create.useMutation({
-    onSuccess() {
+    onSuccess(response) {
       showToast("Chapitre créé avec succès", 2000, "success");
-      void queryClient.invalidateQueries({ queryKey: ["chapter.getByPart"] });
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.chapter.getAll({
+          pathParams: { projectId },
+        }),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.chapter.getByPart({
+          pathParams: { projectId, partId: response.body.part.id },
+        }),
+      });
       form.reset();
       setOpen(false);
     },
