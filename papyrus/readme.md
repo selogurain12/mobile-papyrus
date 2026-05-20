@@ -1,62 +1,48 @@
-# bibliocine
-README à compléter
+# Papyrus
 
-## Bibliocine (dev mobile)
+Projet de fin d'année de Mastère - Suite applicative avec API et Mobile.
 
-Ce dépôt contient le backend et l'application mobile/web pour Bibliocine — une application de gestion personnelle de livres et films (suivi, états de lecture/visionnage, listes d'amis, etc.). Ce README explique comment installer, lancer et contribuer au projet en environnement de développement.
+## Architecture
 
-**État**: code source (backend: `bibliocine/api`, mobile/web UI: `bibliocine/webui`) — destiné au développement.
+- **API** (`apps/api/`) - Backend NestJS (sur le repo: https://github.com/selogurain12/Papyrus)
+- **Webui** (`papyrus/webui`)- React Native
 
-**Langues / outils**: TypeScript, NestJS (backend), Expo / React Native (mobile), pnpm, PostgreSQL, Docker.
+## Stack Technique
 
-**Table des matières**
-- Présentation
-- Structure du dépôt
-- Installation
-- Lancer en développement
-
-## Présentation
-
-Bibliocine est un projet personnel pour gérer et suivre la lecture de livres et le visionnage de films. Le repository regroupe le backend (API) et le client mobile/web (Expo / React Native).
-
-## Structure du dépôt
-
-- `bibliocine/` : code principal (workspace pnpm)
-	- `api/` : backend NestJS (API, migrations, config)
-	- `webui/` : application mobile/web (Expo / React Native)
-	- `docker-compose.yaml` : services utiles (ex: base PostgreSQL)
-	- `readme.md` : ce fichier
+- **Backend** : NestJS + TypeScript + Express
+- **Qualité** : ESLint + Prettier
 
 ## Installation
 
-1. Cloner le dépôt :
-
-```powershell
-git clone <repo_url>
-cd <repo_folder>/bibliocine
-```
-
-2. Installer les dépendances (workspace pnpm) :
-
-```powershell
+```bash
+git clone <repository-url>
+cd papyrus
+corepack enable
 pnpm install
 ```
 
-3. Démarrer les services nécessaires (PostgreSQL) :
+## Lancement
 
-```powershell
-docker-compose up -d
+```bash
+pnpx expo start
+```
+ou
+```bash
+pnpx run start
 ```
 
-> Remarque : le fichier `docker-compose.yaml` se trouve dans `bibliocine/` et contient la configuration pour la base de données.
+## Structure
 
-## Lancer en développement
-- Démarrer l'UI (Expo) :
-
-```powershell
-pnpm --filter webui run start
-# ou pour Android
-pnpm --filter webui run android
+Repo Papyrus:
+```
+apps/
+├── apii/          # Backend NestJS
+└── webui_desktop/    # App Electron
+packages/         # Code partagé
 ```
 
-Utilisez les commandes Expo fournies pour lancer sur simulateur, appareil ou web.
+Repo Papyrus Mobile:
+```
+webui/            # App Mobile
+packages/         # Code partagé
+```
