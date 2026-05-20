@@ -12,6 +12,7 @@ import { ListResearch } from "./research/list-research";
 import { NotesList } from "./notes/list-notes";
 import { EventsList } from "./event/list-event";
 import { ChapterList } from "./chapter/list-chapter";
+import { ExportPage } from "./export/export-page";
 
 export type ProjectScreen =
   | "dashboard"
@@ -48,6 +49,7 @@ export function HomeProject({ route }: Props) {
             {screen === "notes" && <NotesList />}
             {screen === "timeline" && <EventsList />}
             {screen === "chapters" && <ChapterList />}
+            {screen === "export" && <ExportPage />}
           </View>
         </View>
       </View>
